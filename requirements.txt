@@ -1,0 +1,9 @@
+# Runtime dependencies for predict.py (standalone inference CLI).
+# The notebook itself runs on Kaggle, where these are pre-installed; this file
+# is for running predict.py in a local/fresh environment.
+#
+# CPU-only install works out of the box. For GPU, install the CUDA build of
+# torch/torchvision per https://pytorch.org/get-started/locally/ instead.
+torch>=2.0
+torchvision>=0.15
+pillow>=9.0

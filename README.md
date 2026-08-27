@@ -36,6 +36,29 @@ between runs.
 - `failures_<condition>.png` — false-positive/false-negative sample grids for the two worst conditions
 - `predictions.json` — example output of the inference contract, `[{"image_path", "pred"}]`
 
+## Standalone inference (`predict.py`)
+
+The notebook is the training/eval environment, but the required "score a directory of images"
+deliverable is also provided as a standalone CLI, `predict.py`, so it can be run outside Kaggle against
+the trained checkpoint. It uses the exact same inference path as the notebook (ResNet18, 128px bicubic
+resize, ImageNet normalization, sigmoid → `pred` = P(image is AI-generated)).
+
+```bash
+# 1. install dependencies (CPU works out of the box; see requirements.txt for GPU)
+pip install -r requirements.txt
+
+# 2. score a directory of images with the checkpoint the notebook produced
+python predict.py \
+  --image-dir ./test_images \
+  --checkpoint resnet18_aigc_detector.pt \
+  --output predictions.json
+```
+
+This writes the deliverable JSON: `[{"image_path": ..., "pred": <float 0-1>}, ...]`. Useful flags:
+`--recursive` to walk subdirectories, `--batch-size` to tune throughput, and `--device {auto,cuda,cpu}`.
+Run `python predict.py --help` for the full list. Unreadable/corrupt images are skipped with a warning
+rather than aborting the run.
+
 ## Design decisions and rationale
 
 See [`.bureau/contracts/direction_v1.md`](.bureau/contracts/direction_v1.md) for the full reasoning
@@ -64,6 +87,7 @@ adversarial-robustness claims.
 ## Devpost deliverable mapping
 
 - **Working prototype** → `aigc_robust_detector.ipynb`, run end-to-end on Kaggle.
+- **Scoring script (image dir → JSON of `image_path` + `pred`)** → `predict.py` (see above).
 - **Robustness evaluation writeup** → the notebook's robustness table/plot + this README.
 - **Error analysis** → the notebook's failure-grid section.
 - **Reproducibility** → this README's Kaggle setup steps; the notebook seeds all RNGs (`SEED = 42`).
