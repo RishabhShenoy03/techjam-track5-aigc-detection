@@ -34,6 +34,9 @@ between runs.
 - `robustness_table.csv` — accuracy/precision/recall/AUC for all 15 conditions
 - `robustness_plot.png` — bar chart of accuracy per condition vs. the 85% success bar
 - `failures_<condition>.png` — false-positive/false-negative sample grids for the two worst conditions
+- `success_<condition>.png` — correctly-classified sample grids (real->real, fake->fake), one per
+  condition, for **all 15 conditions** — each example shown as original image next to its
+  transformed version
 - `predictions.json` — example output of the inference contract, `[{"image_path", "pred"}]`
 
 ## Standalone inference (`predict.py`)
